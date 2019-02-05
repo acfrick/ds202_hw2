@@ -1,0 +1,110 @@
+---
+title: "hw1"
+author: "Allegra Frickel"
+date: "1/28/2019"
+output: html_document
+---
+
+```{r}
+a0 <- 1
+a0
+```
+
+**R commands**
+
+```{r}
+#1
+ce <- c(-10:15)
+ce1 <- (5/9*ce) - 32
+ce1
+```
+
+```{r}
+#2
+vec200 <- rep(c(1,0),100)
+vec200
+```
+
+```{r}
+#3
+sqrt(1001)
+numPerfect <- floor(sqrt(1001))
+numPerfect
+```
+
+**Cars and Mileage**
+
+```{r}
+library(ggplot2)
+str(mpg)
+```
+
+```{r chunk_1, results="hide"}
+#1
+hwy <- mpg$hwy
+names(hwy) <- mpg$model
+hwy
+sort(hwy, decreasing = TRUE)
+```
+
+```{r}
+head(hwy, 3)
+top3a <- names(head(hwy, 3))
+top3a
+top3 <- mpg[mpg$hwy >40, ]
+top3
+```
+
+
+```{r chunk_2, results="hide"}
+#2
+mpg$class
+cmpt <- mpg[mpg$class == "compact", ]
+cmpt
+```
+
+```{r}
+numCompact <- nrow(cmpt)
+numCompact
+```
+
+
+```{r}
+#3
+plot(mpg$hwy, mpg$cty)
+```
+
+The relationship is positively linear. As highway MPG increases, so does city MPG. There are so few points visible because some vehicles may have the same highway and city MPG. In other words, some data points are overlapping one another.
+
+```{r chunk_3, results="hide"}
+#4
+mpg1999 <- mpg[mpg$year == 1999, ]
+mpg2008 <- mpg[mpg$year == 2008, ]
+both <- rbind(mpg1999, mpg2008)
+both
+```
+
+Based on the following scatterplot, boxplots and summary, it is evident that 2008 cars have better MPG.
+
+```{r}
+plot(both$hwy, both$cty, col=both$year)
+```
+
+```{r}
+mpg1999 <- mpg[mpg$year == 1999, ]
+mpg2008 <- mpg[mpg$year == 2008, ]
+mpg1999$mpg_avg <- rowMeans(mpg1999[c('hwy', 'cty')], na.rm=TRUE)
+mpg2008$mpg_avg <- rowMeans(mpg2008[c('hwy', 'cty')], na.rm=TRUE)
+both <- rbind(mpg1999, mpg2008)
+both$year <- as.factor(both$year)
+box <- ggplot(both, aes(x=year, y=mpg_avg)) + geom_boxplot()
+box
+```
+
+```{r}
+summary(mpg1999$hwy, mpg1999$cty, col=mpg$year)
+```
+
+```{r}
+summary(mpg2008$hwy, mpg2008$cty, col=mpg$year)
+```
